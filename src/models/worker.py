@@ -78,7 +78,7 @@ class Worker(object):
         """
         self.model.train()
         train_loss = train_acc = train_total = 0
-        for epoch in range(self.num_epoch):
+        for epoch in range(self.num_epoch if 'n_epoch' not in kwargs else 1):
             train_loss = train_acc = train_total = 0
             for batch_idx, (x, y) in enumerate(train_dataloader):
                 # from IPython import embed
