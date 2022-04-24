@@ -29,6 +29,7 @@ class FedAvgDQNTrainer(BaseTrainer):
 
     def train(self):
         print('>>> Select {} clients per round \n'.format(self.clients_per_round))
+        self.agent.num_clients = len(self.clients)
 
         # Fetch latest flat model parameter
         self.latest_model = self.worker.get_flat_model_params().detach()
@@ -56,6 +57,10 @@ class FedAvgDQNTrainer(BaseTrainer):
             self.latest_model = self.aggregate(solns)
             self.optimizer.inverse_prop_decay_learning_rate(round_i)
 
+            # TODO: Write new function to get diff for reward
+            server_model_accuracy = self.test_global_model()
+            self.agent.last_reward = self.get_diff(self.latest_model)
+
             for client in self.clients:
                 client.set_model_params(self.latest_model)
                 client.local_train()
@@ -66,6 +71,10 @@ class FedAvgDQNTrainer(BaseTrainer):
 
         # Save tracked information
         self.metrics.write()
+
+    def test_global_model(self):
+
+
 
 
     def aggregate(self, solns):
