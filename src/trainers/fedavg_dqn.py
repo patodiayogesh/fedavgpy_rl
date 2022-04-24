@@ -55,15 +55,18 @@ class FedAvgDQNTrainer(BaseTrainer):
 
             # Update latest model
             self.latest_model = self.aggregate(solns)
-            self.optimizer.inverse_prop_decay_learning_rate(round_i)
+            # self.optimizer.inverse_prop_decay_learning_rate(round_i)
 
-            # TODO: Write new function to get diff for reward
-            server_model_accuracy = self.test_global_model()
-            self.agent.last_reward = self.get_diff(self.latest_model)
+            # TODO: Write new function to test global model
+            server_model_accuracy = self.test_global_model() # self.test_latest_model_on_evaldata(round_i)
+            self.agent.reward_function(server_model_accuracy)
 
             for client in self.clients:
                 client.set_model_params(self.latest_model)
                 client.local_train()
+
+            if round_i % self.agent.target_update == 0:
+                self.update_network()
 
         # Test final model on train data
         self.test_latest_model_on_traindata(self.num_round)
@@ -73,8 +76,10 @@ class FedAvgDQNTrainer(BaseTrainer):
         self.metrics.write()
 
     def test_global_model(self):
+        return accuracy
 
-
+    def update_network(self):
+        self.agent.update_Q_network()
 
 
     def aggregate(self, solns):
