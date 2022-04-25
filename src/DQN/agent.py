@@ -28,8 +28,8 @@ class Agent:
         # for this setup step = round
         self.step_count = 0
 
-        self.train_network = DQN(10100, 100)
-        self.target_network = DQN(10100, 100)
+        self.train_network = DQN(10100, 100).to(self.device)
+        self.target_network = DQN(10100, 100).to(self.device)
         self.target_network.load_state_dict(self.train_network.state_dict())
         self.target_network.eval()
 
