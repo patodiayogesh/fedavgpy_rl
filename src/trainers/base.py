@@ -108,14 +108,17 @@ class BaseTrainer(object):
             c.set_flat_model_params(self.latest_model)
 
             # Solve minimization locally
-            soln, stat = c.local_train()
+            if 'n_epoch' in kwargs:
+                soln, stat = c.local_train(n_epoch=1)
+            else:
+                soln, stat = c.local_train()
             if self.print_result:
                 print("Round: {:>2d} | CID: {: >3d} ({:>2d}/{:>2d})| "
                       "Param: norm {:>.4f} ({:>.4f}->{:>.4f})| "
                       "Loss {:>.4f} | Acc {:>5.2f}% | Time: {:>.2f}s".format(
                        round_i, c.cid, i, self.clients_per_round,
                        stat['norm'], stat['min'], stat['max'],
-                       stat['loss'], stat['acc']*100, stat['time']))
+                       stat['loss'], stat['acc'], stat['time']))
 
             # Add solutions and stats
             solns.append(soln)

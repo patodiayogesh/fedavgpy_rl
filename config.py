@@ -4,7 +4,9 @@ DATASETS = ['sent140', 'nist', 'shakespeare',
 TRAINERS = {'fedavg': 'FedAvgTrainer',
             'fedavg4': 'FedAvg4Trainer',
             'fedavg5': 'FedAvg5Trainer',
-            'fedavg9': 'FedAvg9Trainer',}
+            'fedavg9': 'FedAvg9Trainer',
+            'fedavg_dqn': 'FedAvgDQNTrainer',
+            }
 OPTIMIZERS = TRAINERS.keys()
 
 
