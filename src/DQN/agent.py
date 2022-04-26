@@ -12,11 +12,11 @@ class Agent:
 
     def __init__(self, k=10):
 
-        self.batch_size = 16
+        self.batch_size = 2
         self.gamma = 0.999
         self.eps_start = 0.9
-        self.eps_end = 0.05
-        self.eps_decay = -0.005
+        self.eps_end = 0.01
+        self.eps_decay = -0.05
         self.optimize_steps = 10
         self.target_update = 10
         self.mem_size = 100
@@ -62,7 +62,7 @@ class Agent:
         next_state_action_vals = next_state_action_vals.view(next_state_action_vals.shape[0],1)
         expected_state_action_values = (next_state_action_vals*self.gamma) + reward_batch
 
-        loss = self.criterion(state_action_vals, expected_state_action_values.unsqueeze(1))
+        loss = self.criterion(state_action_vals.unsqueeze(1), expected_state_action_values.unsqueeze(1))
 
         self.optimizer.zero_grad()
         loss.backward()
