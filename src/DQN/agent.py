@@ -12,13 +12,13 @@ class Agent:
 
     def __init__(self, k=10):
 
-        self.batch_size = 2
+        self.batch_size = 32
         self.gamma = 0.999
         self.eps_start = 0.9
         self.eps_end = 0.01
         self.eps_decay = -0.05
         self.optimize_steps = 10
-        self.target_update = 10
+        self.target_update = 10 #increase this
         self.mem_size = 100
         self.k = k
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
