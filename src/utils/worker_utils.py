@@ -143,6 +143,20 @@ class Metrics(object):
         self.loss_on_eval_data = [0] * num_rounds
         self.acc_on_eval_data = [0] * num_rounds
 
+        # Client Train and Eval data
+        self.client_train_acc, self.client_eval_acc = {}, {}
+        for i in range(num_rounds):
+            self.client_train_acc[i] = None
+            self.client_eval_acc[i] = None
+        # self.client_train_acc= [0] * num_rounds
+        # self.client_eval_acc = [0] * num_rounds
+
+        # Selected Clients
+        self.selected_clients = {}
+        for i in range(num_rounds):
+            self.selected_clients[i] = None
+
+
         self.result_path = mkdir(os.path.join('./result', self.options['dataset']))
         suffix = '{}_sd{}_lr{}_ep{}_bs{}_{}'.format(name,
                                                     options['seed'],
@@ -161,6 +175,9 @@ class Metrics(object):
         self.train_writer = SummaryWriter(train_event_folder)
         self.eval_writer = SummaryWriter(eval_event_folder)
 
+    def update_selected_clients(self, round_i, client_ids):
+        self.selected_clients[round_i] = client_ids
+
     def update_commu_stats(self, round_i, stats):
         cid, bytes_w, comp, bytes_r = \
             stats['id'], stats['bytes_w'], stats['comp'], stats['bytes_r']
@@ -178,18 +195,23 @@ class Metrics(object):
         self.acc_on_train_data[round_i] = train_stats['acc']
         self.gradnorm_on_train_data[round_i] = train_stats['gradnorm']
         self.graddiff_on_train_data[round_i] = train_stats['graddiff']
+        self.client_train_acc[round_i] = train_stats['client_accuracies']
 
         self.train_writer.add_scalar('train_loss', train_stats['loss'], round_i)
         self.train_writer.add_scalar('train_acc', train_stats['acc'], round_i)
         self.train_writer.add_scalar('gradnorm', train_stats['gradnorm'], round_i)
         self.train_writer.add_scalar('graddiff', train_stats['graddiff'], round_i)
+        #self.train_writer.add_scalar('client_train_acc', train_stats['client_accuracies'], round_i)
+
 
     def update_eval_stats(self, round_i, eval_stats):
         self.loss_on_eval_data[round_i] = eval_stats['loss']
         self.acc_on_eval_data[round_i] = eval_stats['acc']
+        self.client_eval_acc[round_i] = eval_stats['client_accuracies']
 
         self.eval_writer.add_scalar('test_loss', eval_stats['loss'], round_i)
         self.eval_writer.add_scalar('test_acc', eval_stats['acc'], round_i)
+        #self.eval_writer.add_scalar('client_test_acc', eval_stats['client_accuracies'], round_i)
 
     def write(self):
         metrics = dict()
@@ -214,6 +236,10 @@ class Metrics(object):
         metrics['client_computations'] = self.client_computations
         metrics['bytes_written'] = self.bytes_written
         metrics['bytes_read'] = self.bytes_read
+
+        metrics['client_train_acc'] = self.client_train_acc
+        metrics['client_test_acc'] = self.client_eval_acc
+        metrics['selected_clients'] = self.selected_clients
 
         metrics_dir = os.path.join(self.result_path, self.exp_name, 'metrics.json')
 

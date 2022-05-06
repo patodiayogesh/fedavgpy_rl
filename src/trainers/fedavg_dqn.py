@@ -127,6 +127,7 @@ class FedAvgDQNTrainer(BaseTrainer):
         server_pca_weight = self.pca_model.transform(self.latest_model.cpu().detach().numpy().reshape(1,-1))
         agent_input_weight = torch.Tensor(np.concatenate([server_pca_weight, client_pca_weights]))
         k_clients = self.agent.select_k_agents(agent_input_weight)
+        self.metrics.update_selected_clients(round_n, [int(i) for i in k_clients])
         return [self.clients[int(i)] for i in k_clients]
 
 
