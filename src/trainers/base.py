@@ -210,11 +210,13 @@ class BaseTrainer(object):
         num_samples = []
         tot_corrects = []
         losses = []
+        acc = []
         for c in self.clients:
             tot_correct, num_sample, loss = c.local_test(use_eval_data=use_eval_data)
 
             tot_corrects.append(tot_correct)
             num_samples.append(num_sample)
+            acc.append(tot_correct/num_sample)
             losses.append(loss)
 
         ids = [c.cid for c in self.clients]
@@ -222,6 +224,7 @@ class BaseTrainer(object):
 
         stats = {'acc': sum(tot_corrects) / sum(num_samples),
                  'loss': sum(losses) / sum(num_samples),
+                 'client_accuracies': acc,
                  'num_samples': num_samples, 'ids': ids, 'groups': groups}
 
         return stats
