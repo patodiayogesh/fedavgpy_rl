@@ -29,7 +29,7 @@ Our code is based on the codes for [FedProx](<https://github.com/litian96/FedPro
 
 #### Notes
 
-- There are three choices for `$ALGO`, namely `fedavg4` (containning the Scheme I and II), `fedavg5` (for the original scheme) and `fedavg9` (for the Transformed Scheme II).
+- There are four choices for `$ALGO`, namely `fedavg4` (containning the Scheme I and II), `fedavg5` (for the original scheme) and `fedavg9` (for the Transformed Scheme II) and 'fedavg_dqn' which trains a DDQN for client selection.
 
 - If you don't want to use the Scheme I (where we sample device acccording to $p_k$ and simply average local parameters), please add `--noaverage`.
 
