@@ -1,0 +1,1 @@
+!python main.py --gpu --dataset mnist_all_data_0_equal_niid --clients_per_round 10 --num_round 200 --num_epoch 10 --batch_size 32 --lr 0.1 --device 0 --seed 42 --model 2nn --algo fedavg_dqn

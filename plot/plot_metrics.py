@@ -58,7 +58,7 @@ def default():
     fig.savefig(f'{DATASET}_K.pdf')
 
 
-def acc_plot(metrics):
+def acc_plot(metrics, filepath):
     train_acc = metrics['acc_on_train_data']
     eval_acc = metrics['acc_on_eval_data']
 
@@ -68,12 +68,12 @@ def acc_plot(metrics):
     plt.ylabel('Accuracy')
     plt.legend()
     plt.title('Accuracy vs. Round')
-    plt.savefig('train_eval_acc')
+    plt.savefig(os.path.join(filepath,'train_eval_acc'))
     plt.show()
     plt.clf()
 
 
-def loss_plot(metrics):
+def loss_plot(metrics, filepath):
     train_loss = metrics['loss_on_train_data']
     eval_loss = metrics['loss_on_eval_data']
 
@@ -83,7 +83,7 @@ def loss_plot(metrics):
     plt.ylabel('Loss')
     plt.legend()
     plt.title('Loss vs. Round')
-    plt.savefig('train_eval_loss')
+    plt.savefig(os.path.join(filepath,'train_eval_loss'))
     plt.show()
     plt.clf()
 
@@ -99,7 +99,7 @@ def bin_allocation(bins, round, accuracies):
         else:
             bins[3][round] += 1
 
-def plot_client_bar(data, title, n_rounds, interval):
+def plot_client_bar(data, title, n_rounds, interval,filepath):
     barWidth = 3
     fig = plt.subplots(figsize=(12, 8))
 
@@ -123,11 +123,11 @@ def plot_client_bar(data, title, n_rounds, interval):
     plt.title(title)
 
     plt.legend()
-    plt.savefig(title)
+    plt.savefig(os.path.join(filepath, title))
     plt.show()
 
 
-def client_acc_plot(metrics):
+def client_acc_plot(metrics, filepath):
     client_train_acc = metrics['client_train_acc']
     client_eval_acc = metrics['client_test_acc']
 
@@ -149,20 +149,34 @@ def client_acc_plot(metrics):
 
     # colors = ['r', 'b', 'g', ]
     plot_client_bar(train_bins, 'Client Train Accuracies',
-                    n_rounds, interval)
+                    n_rounds, interval,filepath)
     plot_client_bar(eval_bins, 'Client Eval Accuracies',
-                    n_rounds, interval)
+                    n_rounds, interval, filepath)
 
     return
 
 
 def main():
-    with open('metrics_mnist_all_data_0_equal_niid.json', 'r') as f:
-        metrics = eval(json.load(f))
 
-    acc_plot(metrics)
-    loss_plot(metrics)
-    client_acc_plot(metrics)
+    folders = os.listdir('Results')
+    for dir in folders:
+        if '.DS' in dir:
+            continue
+        dirname = os.path.join('Results', dir)
+        filename = os.path.join(dirname, 'metrics.json')
+        with open(filename, 'r') as f:
+            metrics = eval(json.load(f))
+        acc_plot(metrics, dirname)
+        loss_plot(metrics, dirname)
+        client_acc_plot(metrics, dirname)
+
+
+    # with open('metrics_mnist_all_data_0_equal_niid.json', 'r') as f:
+    #     metrics = eval(json.load(f))
+    #
+    # acc_plot(metrics)
+    # loss_plot(metrics)
+    # client_acc_plot(metrics)
 
 
 main()
