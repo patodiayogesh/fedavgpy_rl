@@ -67,8 +67,8 @@ I have also added a new plot metric to observe how client accuracies change with
 6. I compare the results for `fedavg_dqn` against `fedavg5`. The plots are present in `plot/Results`.
    1. DQN reaches better accuracy than Random Sampling
    2. The number of clients that have >=90% accuracy is more by 20% for Client Selection using DQN
-   3. DQN Client Eval Accuracies ![](/Users/neelampatodia/Desktop/Yogesh/Reinforcement Learning/fedavgpy_rl/plot/Results/mnist_all_data_0_equal_niid_fedavg_dqn_2nn__wn10_tn100_sd42_lr0.1_ep10_bs32_a/Client Eval Accuracies.png)
-   4. `fedavg5` Client Eval Accuracies ![](/Users/neelampatodia/Desktop/Yogesh/Reinforcement Learning/fedavgpy_rl/plot/Results/mnist_all_data_0_equal_niid_fedavg5_2nn__wn10_tn100_sd42_lr0.1_ep10_bs32_a/Client Eval Accuracies.png)
+   3. DQN `fedavg_dqn` Client Eval Accuracies ![](plot/Results/mnist_all_data_0_equal_niid_fedavg_dqn_2nn__wn10_tn100_sd42_lr0.1_ep10_bs32_a/Client Eval Accuracies.png)
+   4. `fedavg5` Client Eval Accuracies ![](plot/Results/mnist_all_data_0_equal_niid_fedavg5_2nn__wn10_tn100_sd42_lr0.1_ep10_bs32_a/Client Eval Accuracies.png)
    5. Overall DQN Client Selection leads to better accuracy of clients.
 
 
