@@ -1,3 +1,6 @@
+# DQN Model
+# 2 Hidden Layers with 512 units each
+
 from torch import nn
 
 class DQN(nn.Module):

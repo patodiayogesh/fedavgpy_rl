@@ -170,13 +170,4 @@ def main():
         loss_plot(metrics, dirname)
         client_acc_plot(metrics, dirname)
 
-
-    # with open('metrics_mnist_all_data_0_equal_niid.json', 'r') as f:
-    #     metrics = eval(json.load(f))
-    #
-    # acc_plot(metrics)
-    # loss_plot(metrics)
-    # client_acc_plot(metrics)
-
-
 main()

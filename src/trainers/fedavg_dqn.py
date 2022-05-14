@@ -9,13 +9,12 @@ import torch
 
 from sklearn.decomposition import PCA
 
-
 criterion = torch.nn.CrossEntropyLoss()
 
 
 class FedAvgDQNTrainer(BaseTrainer):
     """
-    Original Scheme
+    DQN Agent for Client Selection
     """
     def __init__(self, options, dataset):
         model = choose_model(options)
@@ -91,6 +90,12 @@ class FedAvgDQNTrainer(BaseTrainer):
 
 
     def aggregate(self, solns):
+        """
+        Average all the model weights on server
+
+        :param solns: Model weight of all clients
+        :return: New model weight
+        """
         averaged_solution = torch.zeros_like(self.latest_model)
         accum_sample_num = 0
         for num_sample, local_solution in solns:
@@ -102,7 +107,6 @@ class FedAvgDQNTrainer(BaseTrainer):
 
 
     def get_client_weights(self, clients):
-
         client_weights = []
         for c in clients:
             c = c.get_flat_model_params()
@@ -113,8 +117,11 @@ class FedAvgDQNTrainer(BaseTrainer):
         """
         Get weight of all clients. Compute Q values
         Choose top-K clients based on Q values
+
+        :param round_n: Round No
+        :return: Selected Client ids
         """
-        num_clients = min(self.clients_per_round, len(self.clients))
+        # num_clients = min(self.clients_per_round, len(self.clients))
         client_weights = self.get_client_weights(self.clients)
 
         # Train PCA model on client weights during 1st round
